@@ -1,7 +1,7 @@
 import * as z from 'zod';
 
 export interface GuardrailsConfig {
-  provider: 'gemini' | 'openai';
+  provider: 'gemini' | 'anthropic';
   maxRetries: number;
   apiKey?: string;
 }

@@ -1,6 +1,7 @@
 import { createGuardrails } from '../src/index.js';
 import { z } from 'zod';
 import 'dotenv/config';
+import { repairJson } from '../src/repair.js';
 
 const guard = createGuardrails({
   provider: 'gemini',
@@ -19,3 +20,15 @@ const result = await guard.generate({
 console.log('Result:', result.data);
 console.log('Attempts:', result.attempts);
 console.log('Metrics:', guard.metrics());
+
+// тест 1 — markdown fence
+const test1 = repairJson('```json\n{"score": 8}\n```');
+console.log('test1:', test1);
+
+// тест 2 — trailing comma
+const test2 = repairJson('{"score": 8, "tags": ["crypto",]}');
+console.log('test2:', test2);
+
+// тест 3 — оба сразу
+const test3 = repairJson('```json\n{"score": 8,}\n```');
+console.log('test3:', test3);

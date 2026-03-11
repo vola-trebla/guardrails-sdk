@@ -40,11 +40,11 @@ const result = await guard.generate({
 | Local repair | JSON fix без LLM (strip fences, fix commas, close brackets) |
 | Self-correction | Retry с ошибкой валидации в промпте |
 | Metrics collector | Success rate, retry count, avg latency per call |
-| Multi-provider | Gemini + OpenAI через единый интерфейс |
+| Multi-provider | Gemini + Anthropic через единый интерфейс |
 
 ## Стек
 
-TypeScript, Zod, Gemini API, OpenAI API (optional)
+TypeScript, Zod, Gemini API, Anthropic API
 
 ## Установка
 
