@@ -1,22 +1,22 @@
 # guardrails-sdk
 
-npm-библиотека для гарантированно валидного типизированного вывода из LLM.
+An npm library for guaranteed valid, typed output from LLMs.
 
-Вместо голого вызова LLM — пишешь `generate(schema, prompt)` и получаешь типизированный объект, который точно прошёл валидацию.
+Instead of raw LLM calls — just write `generate(schema, prompt)` and get a typed object that is guaranteed to pass validation.
 
-## Как работает
+## How it works
 
-1. Передаёшь **Zod-схему** + промпт
-2. SDK вызывает LLM, парсит ответ, прогоняет через Zod
-3. Не прошло? **Local repair** — чинит JSON без LLM (trailing comma, незакрытые скобки, markdown fences)
-4. Не помогло? **Self-correction** — отправляет LLM свою же ошибку: "вот твой JSON, вот ошибка — исправь"
-5. Ведёт **метрики**: % успешных с первого раза, среднее число ретраев, latency
+1. Pass a **Zod schema** + prompt
+2. SDK calls the LLM, parses the response, validates it through Zod
+3. Failed? **Local repair** — fixes JSON without an LLM call (trailing commas, unclosed brackets, markdown fences)
+4. Still broken? **Self-correction** — sends the LLM its own error: "here's your JSON, here's the error — fix it"
+5. Tracks **metrics**: first-attempt success rate, average retries, latency
 
-## Пример
+## Example
 
 ```typescript
 import { createGuardrails } from 'guardrails-sdk';
-import { z } from 'zod';
+import * as z from 'zod';
 
 const guard = createGuardrails({ provider: 'gemini', maxRetries: 3 });
 
@@ -29,29 +29,29 @@ const result = await guard.generate({
   prompt: 'Rate this article about Bitcoin ETFs',
 });
 
-// result: { title: string, score: number, tags: string[] } — гарантированно
+// result: { title: string, score: number, tags: string[] } — guaranteed
 ```
 
-## Core модули
+## Core modules
 
-| Модуль | Что делает |
+| Module | Description |
 |---|---|
-| `generate()` | Главная функция: schema + prompt → typed object |
-| Local repair | JSON fix без LLM (strip fences, fix commas, close brackets) |
-| Self-correction | Retry с ошибкой валидации в промпте |
+| `generate()` | Main function: schema + prompt → typed object |
+| Local repair | JSON fix without LLM (strip fences, fix commas, close brackets) |
+| Self-correction | Retry with validation error in prompt |
 | Metrics collector | Success rate, retry count, avg latency per call |
-| Multi-provider | Gemini + Anthropic через единый интерфейс |
+| Multi-provider | Gemini + Anthropic via a unified interface |
 
-## Стек
+## Stack
 
 TypeScript, Zod, Gemini API, Anthropic API
 
-## Установка
+## Installation
 
 ```bash
 npm install guardrails-sdk
 ```
 
-## Лицензия
+## License
 
 MIT
